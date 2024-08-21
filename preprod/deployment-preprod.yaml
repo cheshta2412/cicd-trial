@@ -2,19 +2,18 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: hello-world-app-preprod
-  namespace: preprod
 spec:
   replicas: 3
   selector:
     matchLabels:
-      app: hello-world-app
+      app: hello-world-app-preprod
   template:
     metadata:
       labels:
-        app: hello-world-app
+        app: hello-world-app-preprod
     spec:
       containers:
-      - name: hello-world-app
-        image: us-central1-docker.pkg.dev/brave-tea-431307-a2/my-repo/hello-world-app:preprod
+      - name: hello-world-app-preprod
+        image: us-central1-docker.pkg.dev/brave-tea-431307-a2/repo-trial/hello-world-app:preprod-latest
         ports:
         - containerPort: 8080
