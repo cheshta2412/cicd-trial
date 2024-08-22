@@ -2,8 +2,10 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: hello-world-app-preprod
+  labels:
+    app: hello-world-app-preprod
 spec:
-  replicas: 3
+  replicas: 1
   selector:
     matchLabels:
       app: hello-world-app-preprod
