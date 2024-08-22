@@ -1,8 +1,8 @@
 steps:
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['build', '-t', 'us-central1-docker.pkg.dev/brave-tea-431307-a2/repo-trial/hello-world-app:prod-latest', './prod']
+    args: ['build', '-t', 'us-central1-docker.pkg.dev/my-project-433308/repo-trial/hello-world-app:prod-latest', './prod']
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['push', 'us-central1-docker.pkg.dev/brave-tea-431307-a2/repo-trial/hello-world-app:prod-latest']
+    args: ['push', 'us-central1-docker.pkg.dev/my-project-433308/repo-trial/hello-world-app:prod-latest']
   - name: 'gcr.io/cloud-builders/kubectl'
     args: ['apply', '-f', 'prod/deployment-prod.yaml']
     env:

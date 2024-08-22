@@ -14,6 +14,6 @@ spec:
     spec:
       containers:
       - name: hello-world-app-preprod
-        image: us-central1-docker.pkg.dev/brave-tea-431307-a2/repo-trial/hello-world-app:preprod-latest
+        image: us-central1-docker.pkg.dev/my-project-433308/repo-trial/hello-world-app:preprod-latest
         ports:
         - containerPort: 8080
