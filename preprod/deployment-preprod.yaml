@@ -3,19 +3,21 @@ kind: Deployment
 metadata:
   name: hello-world-app-preprod
   labels:
-    app: hello-world-app-preprod
+    app: hello-world-app
 spec:
-  replicas: 1
+  replicas: 3
   selector:
     matchLabels:
-      app: hello-world-app-preprod
+      app: hello-world-app
   template:
     metadata:
       labels:
-        app: hello-world-app-preprod
+        app: hello-world-app
     spec:
+      imagePullSecrets:
+        - name: my-registry-key
       containers:
-      - name: hello-world-app-preprod
-        image: us-central1-docker.pkg.dev/my-project-433308/repo-trial/hello-world-app:preprod-latest
-        ports:
-        - containerPort: 8080
+        - name: hello-world-app
+          image: us-central1-docker.pkg.dev/my-project-433308/repo-trial/hello-world-app:preprod-latest
+          ports:
+            - containerPort: 8080
