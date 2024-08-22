@@ -1,19 +1,13 @@
 steps:
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['build', '-t', 'us-central1-docker.pkg.dev/brave-tea-431307-a2/repo-trial/hello-world-app:preprod-latest', './preprod']
+    args: ['build', '-t', 'us-central1-docker.pkg.dev/brave-tea-431307-a2/repo-trial/hello-world-preprod:latest', '.']
+    dir: 'preprod'
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['push', 'us-central1-docker.pkg.dev/brave-tea-431307-a2/repo-trial/hello-world-app:preprod-latest']
+    args: ['push', 'us-central1-docker.pkg.dev/brave-tea-431307-a2/repo-trial/hello-world-preprod:latest']
   - name: 'gcr.io/cloud-builders/kubectl'
     args: ['apply', '-f', 'preprod/deployment-preprod.yaml']
-    env:
-      - 'CLOUDSDK_COMPUTE_REGION=us-central1'
-      - 'CLOUDSDK_COMPUTE_ZONE=us-central1-a'
   - name: 'gcr.io/cloud-builders/kubectl'
     args: ['apply', '-f', 'preprod/service-preprod.yaml']
-    env:
-      - 'CLOUDSDK_COMPUTE_REGION=us-central1'
-      - 'CLOUDSDK_COMPUTE_ZONE=us-central1-a'
 
 options:
   logging: CLOUD_LOGGING_ONLY
-
