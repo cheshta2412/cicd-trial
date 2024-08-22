@@ -1,16 +1,31 @@
 steps:
-  - name: 'gcr.io/cloud-builders/docker'
-    args: ['build', '-t', 'us-central1-docker.pkg.dev/brave-tea-431307-a2/repo-trial/hello-world-app:preprod-latest', './preprod']
-  - name: 'gcr.io/cloud-builders/docker'
-    args: ['push', 'us-central1-docker.pkg.dev/brave-tea-431307-a2/repo-trial/hello-world-app:preprod-latest']
-  - name: 'gcr.io/cloud-builders/kubectl'
-    args: ['apply', '-f', 'preprod/deployment-preprod.yaml']
-    env:
-      - 'CLOUDSDK_COMPUTE_REGION=us-central1'
-      - 'CLOUDSDK_COMPUTE_ZONE=us-central1-a'
-  - name: 'gcr.io/cloud-builders/kubectl'
-    args: ['apply', '-f', 'preprod/service-preprod.yaml']
-    env:
-      - 'CLOUDSDK_COMPUTE_REGION=us-central1'
-      - 'CLOUDSDK_COMPUTE_ZONE=us-central1-a'
+  # Step 1: Install dependencies
+  - name: 'python:3.8-slim'
+    entrypoint: 'pip'
+    args: ['install', '-r', 'requirements.txt']
 
+  # Step 2: Run tests (if you have any)
+  # - name: 'python:3.8-slim'
+  #   entrypoint: 'pytest'
+  #   args: ['tests/']
+
+  # Step 3: Build Docker image
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['build', '-t', 'us-central1-docker.pkg.dev/my-project-433308/repo-trial/hello-world-app:preprod-latest', '-f', 'preprod/Dockerfile.preprod', '.']
+
+  # Step 4: Push Docker image to Google Container Registry
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['push', 'us-central1-docker.pkg.dev/my-project-433308/repo-trial/hello-world-app:preprod-latest']
+
+  # Step 5: Deploy to GKE
+  - name: 'gcr.io/cloud-builders/kubectl'
+    args:
+      - 'apply'
+      - '-f'
+      - 'preprod/deployment-preprod.yaml'
+    env:
+      - 'CLOUDSDK_COMPUTE_ZONE=us-central1'
+      - 'CLOUDSDK_CONTAINER_CLUSTER=cluster-1'
+
+options:
+  logging: CLOUD_LOGGING_ONLY
