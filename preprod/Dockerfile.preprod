@@ -1,13 +1,27 @@
+# Use the official Python image from the Docker Hub
 FROM python:3.8-slim
 
+# Set the working directory
 WORKDIR /app
 
-COPY requirements.txt requirements.txt
-RUN pip install -r requirements.txt
+# Copy the requirements.txt file into the container
+COPY requirements.txt .
 
-COPY app.py app.py
+# Install the Python dependencies
+RUN pip install --no-cache-dir -r requirements.txt
 
-CMD ["python", "app.py"]
+# Copy the rest of the application code into the container
+COPY . .
+
+# Expose the port the app runs on
+EXPOSE 8080
+
+# Set the environment variable
+ENV FLASK_APP=app.py
+
+# Run the application
+CMD ["flask", "run", "--host=0.0.0.0", "--port=8080"]
+
 
 
 # # Use the official Python image from the Docker Hub
