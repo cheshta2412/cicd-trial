@@ -1,11 +1,33 @@
 steps:
-- name: 'gcr.io/cloud-builders/docker'
-  args: ['build', '-t', 'us-central1-docker.pkg.dev/my-project-433308/repo-trial/hello-world-app:prod-latest', '-f', 'prod/Dockerfile.prod', '.']
-- name: 'gcr.io/cloud-builders/docker'
-  args: ['push', 'us-central1-docker.pkg.dev/my-project-433308/repo-trial/hello-world-app:prod-latest']
-images:
-- 'us-central1-docker.pkg.dev/my-project-433308/repo-trial/hello-world-app:prod-latest'
+  # Step 1: Build the Docker image for prod
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['build', '-t', 'us-central1-docker.pkg.dev/apt-cycling-433408-v4/repo-trial/hello-world-app:prod-latest', '.']
+    dir: 'prod'  # Adjust this if your Dockerfile is in a different directory
 
+  # Step 2: Push the Docker image to Artifact Registry
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['push', 'us-central1-docker.pkg.dev/apt-cycling-433408-v4/repo-trial/hello-world-app:prod-latest']
+
+  # Step 3: Deploy the updated image to GKE
+  - name: 'gcr.io/cloud-builders/kubectl'
+    args: ['set', 'image', 'deployment/hello-world-app-prod', 'hello-world-app-prod=us-central1-docker.pkg.dev/apt-cycling-433408-v4/repo-trial/hello-world-app:prod-latest']
+    env:
+      - 'CLOUDSDK_COMPUTE_ZONE=us-central1-c'
+      - 'CLOUDSDK_CONTAINER_CLUSTER=cluster-prod'
+
+  # Step 4: Apply the Kubernetes deployment
+  - name: 'gcr.io/cloud-builders/kubectl'
+    args: ['apply', '-f', 'prod/deployment-prod.yaml']
+
+  # Step 5: Apply the Kubernetes service
+  - name: 'gcr.io/cloud-builders/kubectl'
+    args: ['apply', '-f', 'prod/service-prod.yaml']
+
+timeout: '1200s'
 options:
   logging: CLOUD_LOGGING_ONLY
+
+substitutions:
+  _STAGING_BUCKET: 'YOUR_BUCKET_NAME'  # Replace with your bucket name
+
 

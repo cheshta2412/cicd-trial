@@ -16,7 +16,7 @@ spec:
         - name: my-registry-key
       containers:
         - name: hello-world-app-preprod
-          image: us-central1-docker.pkg.dev/my-project-433308/repo-trial/hello-world-app:preprod-latest
+          image: us-central1-docker.pkg.dev/apt-cycling-433408-v4/repo-trial/hello-world-app:preprod-latest
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 8080
