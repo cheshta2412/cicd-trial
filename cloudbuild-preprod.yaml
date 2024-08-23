@@ -1,3 +1,5 @@
+
+  
 steps:
   # Step 1: Build the Docker image
   - name: 'gcr.io/cloud-builders/docker'
@@ -12,7 +14,6 @@ steps:
   - name: 'gcr.io/cloud-builders/kubectl'
     args: ['set', 'image', 'deployment/hello-world-app-preprod', 'hello-world-app-preprod=us-central1-docker.pkg.dev/my-project-433308/repo-trial/hello-world-app:preprod-latest']
     env:
-      # Ensure these environment variables are set properly
       - 'CLOUDSDK_COMPUTE_ZONE=us-central1-c'
       - 'CLOUDSDK_CONTAINER_CLUSTER=cluster-preprod'
   
@@ -27,46 +28,3 @@ steps:
 timeout: '1200s'  # Adjust the timeout if needed
 options:
   logging: CLOUD_LOGGING_ONLY
-
-# steps:
-#   # Step 1: Install dependencies
-#   - name: 'python:3.8-slim'
-#     entrypoint: 'pip'
-#     args: ['install', '-r', 'requirements.txt']
-
-#   # Step 2: Run tests (if you have any)
-#   # - name: 'python:3.8-slim'
-#   #   entrypoint: 'pytest'
-#   #   args: ['tests/']
-
-#   # Step 3: Build Docker image
-#   - name: 'gcr.io/cloud-builders/docker'
-#     args: ['build', '-t', 'us-central1-docker.pkg.dev/my-project-433308/repo-trial/hello-world-app:preprod-latest', '-f', 'preprod/Dockerfile.preprod', '.']
-
-#   # Step 4: Push Docker image to Google Container Registry
-#   - name: 'gcr.io/cloud-builders/docker'
-#     args: ['push', 'us-central1-docker.pkg.dev/my-project-433308/repo-trial/hello-world-app:preprod-latest']
-
-#   # Step 5: Deploy to GKE
-#   - name: 'gcr.io/cloud-builders/kubectl'
-#     args:
-#       - 'apply'
-#       - '-f'
-#       - 'preprod/deployment-preprod.yaml'
-#     env:
-#       - 'CLOUDSDK_COMPUTE_ZONE=us-central1'
-#       - 'CLOUDSDK_CONTAINER_CLUSTER=cluster-preprod'
-
-# options:
-#   logging: CLOUD_LOGGING_ONLY
-
-# steps:
-# - name: 'gcr.io/cloud-builders/docker'
-#   args: ['build', '-t', 'us-central1-docker.pkg.dev/my-project-433308/repo-trial/hello-world-app:preprod-latest', '-f', 'preprod/Dockerfile.preprod', '.']
-# - name: 'gcr.io/cloud-builders/docker'
-#   args: ['push', 'us-central1-docker.pkg.dev/my-project-433308/repo-trial/hello-world-app:preprod-latest']
-# images:
-# - 'us-central1-docker.pkg.dev/my-project-433308/repo-trial/hello-world-app:preprod-latest'
-
-# options:
-#   logging: CLOUD_LOGGING_ONLY
