@@ -12,7 +12,6 @@ steps:
   - name: 'gcr.io/cloud-builders/kubectl'
     args: ['set', 'image', 'deployment/hello-world-app-preprod', 'hello-world-app-preprod=us-central1-docker.pkg.dev/my-project-433308/repo-trial/hello-world-app:preprod-latest']
     env:
-      # Ensure these environment variables are set properly
       - 'CLOUDSDK_COMPUTE_ZONE=us-central1-c'
       - 'CLOUDSDK_CONTAINER_CLUSTER=cluster-preprod'
   
@@ -27,6 +26,7 @@ steps:
 timeout: '1200s'  # Adjust the timeout if needed
 options:
   logging: CLOUD_LOGGING_ONLY
+
 
 # steps:
 #   # Step 1: Install dependencies
