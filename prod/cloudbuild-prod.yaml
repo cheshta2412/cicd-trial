@@ -28,6 +28,7 @@ options:
   logging: CLOUD_LOGGING_ONLY
 
 substitutions:
-  _STAGING_BUCKET: 'YOUR_BUCKET_NAME'  # Replace with your bucket name
+  _STAGING_BUCKET: 'apt-cycling-433408-v4-bucket'
+
 
 
