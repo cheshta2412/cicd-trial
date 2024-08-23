@@ -2,13 +2,13 @@ steps:
   # Step 1: Build the Docker image
   - name: 'gcr.io/cloud-builders/docker'
     args: ['build', '-t', 'us-central1-docker.pkg.dev/apt-cycling-433408-v4/repo-trial/hello-world-app:preprod-latest', '.']
-    dir: 'preprod'  # Ensure this is the correct directory
+    dir: 'preprod'  # Ensure the working directory is set to your 'preprod' folder
 
   # Step 2: Push the Docker image to Artifact Registry
   - name: 'gcr.io/cloud-builders/docker'
     args: ['push', 'us-central1-docker.pkg.dev/apt-cycling-433408-v4/repo-trial/hello-world-app:preprod-latest']
 
-  # Step 3: Deploy the updated image to GKE Preprod
+  # Step 3: Deploy the updated image to GKE
   - name: 'gcr.io/cloud-builders/kubectl'
     args: ['set', 'image', 'deployment/hello-world-app-preprod', 'hello-world-app-preprod=us-central1-docker.pkg.dev/apt-cycling-433408-v4/repo-trial/hello-world-app:preprod-latest']
     env:
@@ -17,13 +17,11 @@ steps:
   
   # Step 4: Apply the Kubernetes deployment
   - name: 'gcr.io/cloud-builders/kubectl'
-    args: ['apply', '-f', 'deployment-preprod.yaml']
-    dir: 'preprod'  # Ensure this is the correct directory if files are in a sub-directory
+    args: ['apply', '-f', 'preprod/deployment-preprod.yaml']
 
   # Step 5: Apply the Kubernetes service
   - name: 'gcr.io/cloud-builders/kubectl'
-    args: ['apply', '-f', 'service-preprod.yaml']
-    dir: 'preprod'  # Ensure this is the correct directory if files are in a sub-directory
+    args: ['apply', '-f', 'preprod/service-preprod.yaml']
 
 timeout: '1200s'  # Adjust the timeout if needed
 options:
