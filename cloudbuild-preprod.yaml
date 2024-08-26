@@ -7,15 +7,13 @@ steps:
   - name: 'gcr.io/cloud-builders/docker'
     args: ['push', 'us-central1-docker.pkg.dev/apt-cycling-433408-v4/repo-trial/hello-world-app:preprod-latest']
 
-  
   # Step 3: Get GKE credentials
   - name: 'gcr.io/cloud-builders/gcloud'
     entrypoint: 'bash'
     args:
       - '-c'
       - |
-        gcloud container clusters get-credentials cluster-preprod --zone us-central1-a --project apt-cycling-433408-v4
-
+        gcloud container clusters get-credentials cluster-preprod --zone us-central1 --project apt-cycling-433408-v4
 
   # Step 4: Deploy the updated image to GKE
   - name: 'gcr.io/cloud-builders/kubectl'
