@@ -1,25 +1,25 @@
 steps:
-  # Step 1: Build the Docker image for prod
+  # Build the Docker image
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['build', '-t', 'us-central1-docker.pkg.dev/apt-cycling-433408-v4/repo-trial/hello-world-app:prod-latest', '.']
-    dir: 'prod'  # Adjust this if your Dockerfile is in a different directory
+    args: ['build', '-t', 'us-central1-docker.pkg.dev/apt-cycling-433408-v4/repo-trial/hello-world-app:prod-latest', 'prod/']  # Specify the prod directory
 
-  # Step 2: Push the Docker image to Artifact Registry
+  # Push the Docker image to Artifact Registry
   - name: 'gcr.io/cloud-builders/docker'
     args: ['push', 'us-central1-docker.pkg.dev/apt-cycling-433408-v4/repo-trial/hello-world-app:prod-latest']
 
-  # Step 3: Deploy the updated image to GKE
-  - name: 'gcr.io/cloud-builders/kubectl'
-    args: ['set', 'image', 'deployment/hello-world-app-prod', 'hello-world-app-prod=us-central1-docker.pkg.dev/apt-cycling-433408-v4/repo-trial/hello-world-app:prod-latest']
-    env:
-      - 'CLOUDSDK_COMPUTE_ZONE=us-central1-c'
-      - 'CLOUDSDK_CONTAINER_CLUSTER=cluster-prod'
+  # Get GKE credentials for the prod cluster
+  - name: 'gcr.io/cloud-builders/gcloud'
+    entrypoint: 'bash'
+    args:
+      - '-c'
+      - |
+        gcloud container clusters get-credentials cluster-prod --zone us-central1 --project apt-cycling-433408-v4
 
-  # Step 4: Apply the Kubernetes deployment
+  # Deploy the updated image to GKE
   - name: 'gcr.io/cloud-builders/kubectl'
     args: ['apply', '-f', 'prod/deployment-prod.yaml']
 
-  # Step 5: Apply the Kubernetes service
+  # Apply the Kubernetes service for production
   - name: 'gcr.io/cloud-builders/kubectl'
     args: ['apply', '-f', 'prod/service-prod.yaml']
 
@@ -27,8 +27,35 @@ timeout: '1200s'
 options:
   logging: CLOUD_LOGGING_ONLY
 
-substitutions:
-  _STAGING_BUCKET: 'apt-cycling-433408-v4-bucket'
+
+# steps:
+#   # Build the Docker image
+#   - name: 'gcr.io/cloud-builders/docker'
+#     args: ['build', '-t', 'us-central1-docker.pkg.dev/apt-cycling-433408-v4/repo-trial/hello-world-app:prod-latest', '.']
+
+#   # Push the Docker image to Artifact Registry
+#   - name: 'gcr.io/cloud-builders/docker'
+#     args: ['push', 'us-central1-docker.pkg.dev/apt-cycling-433408-v4/repo-trial/hello-world-app:prod-latest']
+
+#   # Get GKE credentials
+#   - name: 'gcr.io/cloud-builders/gcloud'
+#     entrypoint: 'bash'
+#     args:
+#       - '-c'
+#       - |
+#         gcloud container clusters get-credentials cluster-prod --zone us-central1 --project apt-cycling-433408-v4
+
+#   # Deploy the updated image to GKE
+#   - name: 'gcr.io/cloud-builders/kubectl'
+#     args: ['apply', '-f', 'prod/deployment-prod.yaml']
+
+#   # Apply the Kubernetes service
+#   - name: 'gcr.io/cloud-builders/kubectl'
+#     args: ['apply', '-f', 'prod/service-prod.yaml']
+
+# timeout: '1200s'
+# options:
+#   logging: CLOUD_LOGGING_ONLY
 
 
 
