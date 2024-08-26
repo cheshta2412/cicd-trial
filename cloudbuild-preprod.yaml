@@ -1,13 +1,14 @@
 steps:
-  # Build the Docker image
+  # Step 1: Build the Docker image
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['build', '-t', 'us-central1-docker.pkg.dev/apt-cycling-433408-v4/repo-trial/hello-world-app:preprod-latest', 'preprod/']  # Ensure correct directory
+    args: ['build', '-t', 'us-central1-docker.pkg.dev/apt-cycling-433408-v4/repo-trial/hello-world-app:preprod-latest', '.']
+    # Note: Changed 'preprod/' to '.' to use the root directory
 
-  # Push the Docker image
+  # Step 2: Push the Docker image to Artifact Registry
   - name: 'gcr.io/cloud-builders/docker'
     args: ['push', 'us-central1-docker.pkg.dev/apt-cycling-433408-v4/repo-trial/hello-world-app:preprod-latest']
 
-  # Get GKE credentials
+  # Step 3: Get GKE credentials
   - name: 'gcr.io/cloud-builders/gcloud'
     entrypoint: 'bash'
     args:
@@ -15,17 +16,55 @@ steps:
       - |
         gcloud container clusters get-credentials cluster-preprod --zone us-central1 --project apt-cycling-433408-v4
 
-  # Deploy the updated image to GKE
+  # Step 4: Deploy the updated image to GKE
   - name: 'gcr.io/cloud-builders/kubectl'
     args: ['apply', '-f', 'preprod/deployment-preprod.yaml']
+    # Added additional context and debugging steps
+    env:
+      - 'CLOUDSDK_COMPUTE_ZONE=us-central1'
+      - 'CLOUDSDK_CONTAINER_CLUSTER=cluster-preprod'
 
-  # Apply the Kubernetes service
+  # Step 5: Apply the Kubernetes service
   - name: 'gcr.io/cloud-builders/kubectl'
     args: ['apply', '-f', 'preprod/service-preprod.yaml']
+    # Added additional context and debugging steps
+    env:
+      - 'CLOUDSDK_COMPUTE_ZONE=us-central1'
+      - 'CLOUDSDK_CONTAINER_CLUSTER=cluster-preprod'
 
 timeout: '1200s'
 options:
   logging: CLOUD_LOGGING_ONLY
+
+
+# steps:
+#   # Build the Docker image
+#   - name: 'gcr.io/cloud-builders/docker'
+#     args: ['build', '-t', 'us-central1-docker.pkg.dev/apt-cycling-433408-v4/repo-trial/hello-world-app:preprod-latest', 'preprod/']  # Ensure correct directory
+
+#   # Push the Docker image
+#   - name: 'gcr.io/cloud-builders/docker'
+#     args: ['push', 'us-central1-docker.pkg.dev/apt-cycling-433408-v4/repo-trial/hello-world-app:preprod-latest']
+
+#   # Get GKE credentials
+#   - name: 'gcr.io/cloud-builders/gcloud'
+#     entrypoint: 'bash'
+#     args:
+#       - '-c'
+#       - |
+#         gcloud container clusters get-credentials cluster-preprod --zone us-central1 --project apt-cycling-433408-v4
+
+#   # Deploy the updated image to GKE
+#   - name: 'gcr.io/cloud-builders/kubectl'
+#     args: ['apply', '-f', 'preprod/deployment-preprod.yaml']
+
+#   # Apply the Kubernetes service
+#   - name: 'gcr.io/cloud-builders/kubectl'
+#     args: ['apply', '-f', 'preprod/service-preprod.yaml']
+
+# timeout: '1200s'
+# options:
+#   logging: CLOUD_LOGGING_ONLY
 
 
 # steps:
