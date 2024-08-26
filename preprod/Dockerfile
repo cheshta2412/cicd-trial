@@ -5,13 +5,13 @@ FROM python:3.8-slim
 WORKDIR /app
 
 # Copy the requirements.txt file into the container
-COPY preprod/requirements.txt .
+COPY requirements.txt .
 
 # Install the Python dependencies
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy the rest of the application code into the container
-COPY preprod/ .
+COPY . .
 
 # Expose the port the app runs on
 EXPOSE 8080
@@ -21,6 +21,7 @@ ENV FLASK_APP=app.py
 
 # Run the application
 CMD ["flask", "run", "--host=0.0.0.0", "--port=8080"]
+
 
 # # Use the official Python image from the Docker Hub
 # FROM python:3.8-slim
