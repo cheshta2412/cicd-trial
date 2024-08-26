@@ -1,21 +1,19 @@
 steps:
-  # Step 1: Build the Docker image
+  # Build the Docker image
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['build', '-t', 'us-central1-docker.pkg.dev/apt-cycling-433408-v4/repo-trial/hello-world-app:preprod-latest', '.']
-    # Note: Changed 'preprod/' to '.' to use the root directory
+    args: ['build', '-t', 'us-central1-docker.pkg.dev/apt-cycling-433408-v4/repo-trial/hello-world-app:preprod-latest', 'preprod/']  # Ensure correct directory
 
-  # Step 2: Push the Docker image to Artifact Registry
+  # Push the Docker image
   - name: 'gcr.io/cloud-builders/docker'
     args: ['push', 'us-central1-docker.pkg.dev/apt-cycling-433408-v4/repo-trial/hello-world-app:preprod-latest']
 
-  # Step 3: Get GKE credentials
+  # Get GKE credentials
   - name: 'gcr.io/cloud-builders/gcloud'
     entrypoint: 'bash'
     args:
       - '-c'
       - |
         gcloud container clusters get-credentials cluster-preprod --zone us-central1 --project apt-cycling-433408-v4
-
   # Step 4: Deploy the updated image to GKE
   - name: 'gcr.io/cloud-builders/kubectl'
     args: ['apply', '-f', 'preprod/deployment-preprod.yaml']
