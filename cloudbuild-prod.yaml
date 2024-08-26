@@ -1,61 +1,16 @@
 steps:
-  # Build the Docker image
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['build', '-t', 'us-central1-docker.pkg.dev/apt-cycling-433408-v4/repo-trial/hello-world-app:prod-latest', 'prod/']  # Specify the prod directory
-
-  # Push the Docker image to Artifact Registry
+    args: ['build', '-t', 'us-central1-docker.pkg.dev/brave-tea-431307-a2/repo-trial/hello-world-app:prod-latest', './prod']
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['push', 'us-central1-docker.pkg.dev/apt-cycling-433408-v4/repo-trial/hello-world-app:prod-latest']
-
-  # Get GKE credentials for the prod cluster
-  - name: 'gcr.io/cloud-builders/gcloud'
-    entrypoint: 'bash'
-    args:
-      - '-c'
-      - |
-        gcloud container clusters get-credentials cluster-prod --zone us-central1 --project apt-cycling-433408-v4
-
-  # Deploy the updated image to GKE
+    args: ['push', 'us-central1-docker.pkg.dev/brave-tea-431307-a2/repo-trial/hello-world-app:prod-latest']
   - name: 'gcr.io/cloud-builders/kubectl'
     args: ['apply', '-f', 'prod/deployment-prod.yaml']
-
-  # Apply the Kubernetes service for production
+    env:
+      - 'CLOUDSDK_COMPUTE_REGION=us-central1'
+      - 'CLOUDSDK_COMPUTE_ZONE=us-central1-a'
   - name: 'gcr.io/cloud-builders/kubectl'
     args: ['apply', '-f', 'prod/service-prod.yaml']
-
-timeout: '1200s'
-options:
-  logging: CLOUD_LOGGING_ONLY
-
-
-# steps:
-#   # Build the Docker image
-#   - name: 'gcr.io/cloud-builders/docker'
-#     args: ['build', '-t', 'us-central1-docker.pkg.dev/apt-cycling-433408-v4/repo-trial/hello-world-app:prod-latest', '.']
-
-#   # Push the Docker image to Artifact Registry
-#   - name: 'gcr.io/cloud-builders/docker'
-#     args: ['push', 'us-central1-docker.pkg.dev/apt-cycling-433408-v4/repo-trial/hello-world-app:prod-latest']
-
-#   # Get GKE credentials
-#   - name: 'gcr.io/cloud-builders/gcloud'
-#     entrypoint: 'bash'
-#     args:
-#       - '-c'
-#       - |
-#         gcloud container clusters get-credentials cluster-prod --zone us-central1 --project apt-cycling-433408-v4
-
-#   # Deploy the updated image to GKE
-#   - name: 'gcr.io/cloud-builders/kubectl'
-#     args: ['apply', '-f', 'prod/deployment-prod.yaml']
-
-#   # Apply the Kubernetes service
-#   - name: 'gcr.io/cloud-builders/kubectl'
-#     args: ['apply', '-f', 'prod/service-prod.yaml']
-
-# timeout: '1200s'
-# options:
-#   logging: CLOUD_LOGGING_ONLY
-
-
+    env:
+      - 'CLOUDSDK_COMPUTE_REGION=us-central1'
+      - 'CLOUDSDK_COMPUTE_ZONE=us-central1-a'
 
