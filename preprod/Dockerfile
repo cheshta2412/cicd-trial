@@ -1,16 +1,16 @@
 # Use the official Python image from the Docker Hub
 FROM python:3.8-slim
 
-# Set the working directory inside the container
+# Set the working directory
 WORKDIR /app
 
-# Copy the requirements.txt file from the preprod folder into the container
+# Copy the requirements.txt file into the container
 COPY preprod/requirements.txt .
 
-# Install the Python dependencies from the requirements.txt file
+# Install the Python dependencies
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy the rest of the application code from the preprod folder into the container
+# Copy the rest of the application code into the container
 COPY preprod/ .
 
 # Expose the port the app runs on
