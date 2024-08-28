@@ -1,5 +1,5 @@
 steps:
-  # Build the Docker image using the Dockerfile.prod in the prod directory
+  # Build the Docker image using the Dockerfile in the prod directory
   - name: 'gcr.io/cloud-builders/docker'
     args: ['build', '-t', 'us-central1-docker.pkg.dev/apt-cycling-433408-v4/repo-trial/hello-world-app:prod-latest', '-f', 'prod/Dockerfile', '.']
 
@@ -28,5 +28,6 @@ options:
   logging: CLOUD_LOGGING_ONLY
   substitution_option: ALLOW_LOOSE
   machine_type: 'E2_HIGHCPU_8'
+
 
 
