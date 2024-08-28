@@ -15,13 +15,27 @@ steps:
       - |
         gcloud container clusters get-credentials cluster-prod --zone us-central1 --project apt-cycling-433408-v4
 
-  # Deploy the updated image to GKE
+  # Step 4: Deploy the updated image to GKE
   - name: 'gcr.io/cloud-builders/kubectl'
     args: ['apply', '-f', 'prod/deployment-prod.yaml']
+    env:
+      - 'CLOUDSDK_COMPUTE_ZONE=us-central1'
+      - 'CLOUDSDK_CONTAINER_CLUSTER=cluster-prod'
 
-  # Apply the Kubernetes service
+  # Step 5: Apply the Kubernetes service
   - name: 'gcr.io/cloud-builders/kubectl'
     args: ['apply', '-f', 'prod/service-prod.yaml']
+    env:
+      - 'CLOUDSDK_COMPUTE_ZONE=us-central1'
+      - 'CLOUDSDK_CONTAINER_CLUSTER=cluster-prod'
+  
+  # # Deploy the updated image to GKE
+  # - name: 'gcr.io/cloud-builders/kubectl'
+  #   args: ['apply', '-f', 'prod/deployment-prod.yaml']
+
+  # # Apply the Kubernetes service
+  # - name: 'gcr.io/cloud-builders/kubectl'
+  #   args: ['apply', '-f', 'prod/service-prod.yaml']
 
 timeout: '1200s'
 options:
