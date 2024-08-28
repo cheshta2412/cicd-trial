@@ -1,7 +1,7 @@
 steps:
   # Build the Docker image using the Dockerfile.prod in the prod directory
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['build', '-t', 'us-central1-docker.pkg.dev/apt-cycling-433408-v4/repo-trial/hello-world-app:prod-latest', '-f', 'prod/Dockerfile.prod', '.']
+    args: ['build', '-t', 'us-central1-docker.pkg.dev/apt-cycling-433408-v4/repo-trial/hello-world-app:prod-latest', '-f', 'prod/Dockerfile', '.']
 
   # Push the Docker image
   - name: 'gcr.io/cloud-builders/docker'
