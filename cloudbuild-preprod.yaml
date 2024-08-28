@@ -31,7 +31,7 @@ steps:
 
   # Step 6: Ensure that Kubernetes pulls the latest Docker image
   - name: 'gcr.io/cloud-builders/kubectl'
-    args: ['set', 'image', 'deployment/hello-world-app', 'hello-world-app=us-central1-docker.pkg.dev/apt-cycling-433408-v4/repo-trial/hello-world-app:preprod-latest']
+    args: ['set', 'image', 'deployment/hello-world-app-preprod', 'hello-world-app-preprod=us-central1-docker.pkg.dev/apt-cycling-433408-v4/repo-trial/hello-world-app:preprod-latest']
     env:
       - 'CLOUDSDK_COMPUTE_ZONE=us-central1'
       - 'CLOUDSDK_CONTAINER_CLUSTER=cluster-preprod'
