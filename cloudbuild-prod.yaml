@@ -2,7 +2,7 @@ steps:
   # Build the Docker image (assuming you want to rebuild or use the same image)
   - name: 'gcr.io/cloud-builders/docker'
     args: ['build', '-t', 'us-central1-docker.pkg.dev/apt-cycling-433408-v4/repo-trial/hello-world-app:prod-latest', '.']
-
+ 
   # Push the Docker image
   - name: 'gcr.io/cloud-builders/docker'
     args: ['push', 'us-central1-docker.pkg.dev/apt-cycling-433408-v4/repo-trial/hello-world-app:prod-latest']
