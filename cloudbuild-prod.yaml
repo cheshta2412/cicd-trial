@@ -1,13 +1,13 @@
 steps:
-  # Build the Docker image (assuming you want to rebuild or use the same image)
+  # Build the Docker image using the Dockerfile.prod in the prod directory
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['build', '-t', 'us-central1-docker.pkg.dev/apt-cycling-433408-v4/repo-trial/hello-world-app:prod-latest', '.']
- 
+    args: ['build', '-t', 'us-central1-docker.pkg.dev/apt-cycling-433408-v4/repo-trial/hello-world-app:prod-latest', '-f', 'prod/Dockerfile.prod', '.']
+
   # Push the Docker image
   - name: 'gcr.io/cloud-builders/docker'
     args: ['push', 'us-central1-docker.pkg.dev/apt-cycling-433408-v4/repo-trial/hello-world-app:prod-latest']
 
-  # Get GKE credentials for prod
+  # Get GKE credentials for the prod cluster
   - name: 'gcr.io/cloud-builders/gcloud'
     entrypoint: 'bash'
     args:
@@ -15,21 +15,18 @@ steps:
       - |
         gcloud container clusters get-credentials cluster-prod --zone us-central1 --project apt-cycling-433408-v4
 
-  # Deploy to prod environment
+  # Deploy the updated image to GKE
   - name: 'gcr.io/cloud-builders/kubectl'
     args: ['apply', '-f', 'prod/deployment-prod.yaml']
-    env:
-      - 'CLOUDSDK_COMPUTE_ZONE=us-central1'
-      - 'CLOUDSDK_CONTAINER_CLUSTER=cluster-prod'
 
-  # Apply Kubernetes service
+  # Apply the Kubernetes service
   - name: 'gcr.io/cloud-builders/kubectl'
     args: ['apply', '-f', 'prod/service-prod.yaml']
-    env:
-      - 'CLOUDSDK_COMPUTE_ZONE=us-central1'
-      - 'CLOUDSDK_CONTAINER_CLUSTER=cluster-prod'
 
 timeout: '1200s'
 options:
   logging: CLOUD_LOGGING_ONLY
+  substitution_option: ALLOW_LOOSE
+  machine_type: 'E2_HIGHCPU_8'
+
 
