@@ -33,5 +33,5 @@ timeout: '1200s'
 
 options:
   logging: CLOUD_LOGGING_ONLY
-  logs_bucket: 'gs://apt-cycling-433408-v4-bucket'
+  
 
