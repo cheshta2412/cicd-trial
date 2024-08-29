@@ -2,24 +2,48 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: hello-world-app-prod
-  namespace: default
+  labels:
+    app: hello-world-app-prod
 spec:
-  replicas: 1
+  replicas: 3
   selector:
     matchLabels:
-      app: hello-world-app
+      app: hello-world-app-prod
   template:
     metadata:
       labels:
-        app: hello-world-app
+        app: hello-world-app-prod
     spec:
       containers:
-      - name: hello-world-app
-        image: us-central1-docker.pkg.dev/apt-cycling-433408-v4/repo-trial/hello-world-app:latest
+      - name: hello-world-app-prod
+        image: us-central1-docker.pkg.dev/apt-cycling-433408-v4/repo-trial/hello-world-app:prod-latest
         ports:
-        - containerPort: 80
+        - containerPort: 8080
       imagePullSecrets:
-      - name: gcr-secret
+        - name: gcr-secret
+
+# apiVersion: apps/v1
+# kind: Deployment
+# metadata:
+#   name: hello-world-app-prod
+#   namespace: default
+# spec:
+#   replicas: 1
+#   selector:
+#     matchLabels:
+#       app: hello-world-app
+#   template:
+#     metadata:
+#       labels:
+#         app: hello-world-app
+#     spec:
+#       containers:
+#       - name: hello-world-app
+#         image: us-central1-docker.pkg.dev/apt-cycling-433408-v4/repo-trial/hello-world-app:latest
+#         ports:
+#         - containerPort: 80
+#       imagePullSecrets:
+#       - name: gcr-secret
 
 
 # apiVersion: apps/v1
