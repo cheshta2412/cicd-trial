@@ -1,3 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hello-world-app-preprod
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: hello-world-app-preprod
+  template:
+    metadata:
+      labels:
+        app: hello-world-app-preprod
+    spec:
+      imagePullSecrets:
+        - name: my-registry-key
+      containers:
+      - name: hello-world-app-preprod
+        image: us-central1-docker.pkg.dev/apt-cycling-433408-v4/repo-trial/hello-world-app:preprod-latest
+        ports:
+        - containerPort: 8080
+
+
 # apiVersion: apps/v1
 # kind: Deployment
 # metadata:
@@ -20,25 +43,5 @@
 #         ports:
 #         - containerPort: 8080
 
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: hello-world-app-preprod
-spec:
-  replicas: 3
-  selector:
-    matchLabels:
-      app: hello-world-app-preprod
-  template:
-    metadata:
-      labels:
-        app: hello-world-app-preprod
-    spec:
-    imagePullSecrets:
-       - name: my-registry-key
-      containers:
-      - name: hello-world-app-preprod
-        image: us-central1-docker.pkg.dev/apt-cycling-433408-v4/repo-trial/hello-world-app:preprod-latest
-        ports:
-        - containerPort: 8080
+
 
