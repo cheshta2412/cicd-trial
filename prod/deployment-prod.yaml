@@ -16,6 +16,6 @@ spec:
     spec:
       containers:
       - name: hello-world-app-prod
-        image: us-central1-docker.pkg.dev/brave-tea-431307-a2/repo-trial/hello-world-app:prod-latest
+        image: us-central1-docker.pkg.dev/apt-cycling-433408-v4/repo-trial/hello-world-app:prod-latest
         ports:
         - containerPort: 8080
